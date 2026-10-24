@@ -1,0 +1,18 @@
+{{! Extracted from playground.mustache; retained there for the combined demo. }}
+<div data-region="uisandbox-anonymousoption">
+{{#anonymous}}
+    <div class="mt-5 mb-5" data-region="uisandbox-anonymous">
+        <div class="bg-light border rounded p-3">
+            <div class="form-check form-switch mb-1">
+                <input class="form-check-input" type="checkbox" role="switch"
+                       id="{{id}}" name="{{id}}">
+                <label class="form-check-label fw-bold" for="{{id}}">
+                    <i class="fa-solid fa-user-secret me-2" aria-hidden="true"></i>{{label}}
+                </label>
+            </div>
+            <div class="form-text ms-5">{{help}}</div>
+        </div>
+    </div>
+{{/anonymous}}
+
+</div>

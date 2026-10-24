@@ -1,0 +1,24 @@
+{{! Extracted from playground.mustache; retained there for the combined demo. }}
+<div data-region="uisandbox-individualcontributions">
+{{#contributions}}
+    <div class="mt-5 mb-5" data-region="uisandbox-contributions">
+        <h5 class="mb-1">{{title}}</h5>
+        <p class="text-muted small mb-4">{{help}}</p>
+
+        {{#members}}
+            <div class="mb-4">
+                <label for="{{id}}" class="form-label mb-2">
+                    {{#is_self}}
+                        <i class="fa-solid fa-user me-2" aria-hidden="true"></i>
+                    {{/is_self}}
+                    <strong>{{name}}</strong>
+                    <span class="d-block small text-muted">{{prompt}}</span>
+                </label>
+                <textarea class="form-control" id="{{id}}" name="{{id}}"
+                          rows="{{textrows}}" placeholder="{{placeholder}}"></textarea>
+            </div>
+        {{/members}}
+    </div>
+{{/contributions}}
+
+</div>

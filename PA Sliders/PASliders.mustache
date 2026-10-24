@@ -1,0 +1,222 @@
+<style>
+    .peer-assessment {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        color: #212529;
+        box-sizing: border-box;
+    }
+
+    .peer-assessment__heading {
+        margin: 0 0 0.75rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .peer-assessment__description {
+        margin: 0 0 2rem;
+        color: #495057;
+        line-height: 1.6;
+    }
+
+    /* Holds all individual peer sliders. */
+    .peer-assessment__people {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    /* Each person has their own separate block. */
+    .peer-assessment__person {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        min-width: 0;
+    }
+
+    /* The person's name sits directly above the slider. */
+    .peer-assessment__name {
+        display: block;
+        margin: 0;
+        color: #212529;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: left;
+    }
+
+    /* Slider and percentage appear together. */
+    .peer-assessment__control {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .peer-assessment__slider {
+           appearance: none;
+           flex: 1;
+           min-width: 0;
+           height: 8px;
+           margin: 0.5rem 0;
+           background: #dee2e6;
+           border-radius: 999px;
+           cursor: pointer;
+       }
+
+    .peer-assessment__slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: none;
+        border-radius: 50%;
+        background: #2596be;
+        cursor: pointer;
+    }
+
+    .peer-assessment__slider:focus-visible {
+        outline: 2px solid #2596be;
+        outline-offset: 5px;
+    }
+
+    .peer-assessment__percentage {
+        flex: 0 0 52px;
+        color: #2596be;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: right;
+        white-space: nowrap;
+    }
+    .peer-assessment__confirm {
+        padding: 0.65rem 1.5rem;
+        border: 1px solid #2596be;
+        border-radius: 6px;
+        background: #2596be;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .peer-assessment__confirm:hover {
+        background: #207fa1;
+        border-color: #207fa1;
+    }
+    @media (max-width: 600px) {
+        .peer-assessment {
+            padding: 1rem;
+        }
+
+        .peer-assessment__heading {
+            font-size: 1.4rem;
+        }
+
+        .peer-assessment__people {
+            gap: 1.5rem;
+        }
+    }
+</style>
+
+<section class="peer-assessment">
+
+    <h2 class="peer-assessment__heading">
+        {{assessment_title}}
+    </h2>
+
+    <p class="peer-assessment__description">
+        {{assessment_description}}
+    </p>
+
+    <div class="peer-assessment__people">
+
+        {{#peers}}
+            <div class="peer-assessment__person">
+
+                <label
+                        class="peer-assessment__name"
+                        for="peer-percentage-{{name}}">
+                    {{name}}
+                </label>
+
+                <div class="peer-assessment__control">
+
+                    <input
+                            type="range"
+                            class="peer-assessment__slider"
+                            id="peer-percentage-{{name}}"
+                            name="peer_percentage[]"
+                            min="1"
+                            max="100"
+                            step="1"
+                            value="50"
+                            data-peer-slider
+                            aria-label="{{name}} contribution percentage">
+
+                    <output
+                            class="peer-assessment__percentage"
+                            data-peer-percentage
+                            aria-live="off">50%</output>
+
+                </div>
+
+            </div>
+        {{/peers}}
+
+    </div>
+
+</section>
+
+<script>
+    (function () {
+        "use strict";
+
+        function initialisePeerSliders() {
+            document.querySelectorAll("[data-peer-slider]").forEach(
+                    function (slider) {
+                        if (slider.dataset.initialised) {
+                            return;
+                        }
+
+                        slider.dataset.initialised = "true";
+
+                        var person = slider.closest(
+                                ".peer-assessment__person"
+                        );
+
+                        var percentage = person.querySelector(
+                                "[data-peer-percentage]"
+                        );
+
+                        function updatePercentage() {
+                            percentage.textContent = slider.value + "%";
+                        }
+
+                        slider.addEventListener(
+                                "input",
+                                updatePercentage
+                        );
+
+                        updatePercentage();
+                    }
+            );
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener(
+                    "DOMContentLoaded",
+                    initialisePeerSliders
+            );
+        } else {
+            initialisePeerSliders();
+        }
+    })();
+</script>
+<div class="peer-assessment__actions">
+    <button
+            type="button"
+            class="peer-assessment__confirm">
+        Confirm
+    </button>
+</div>

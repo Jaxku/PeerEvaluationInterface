@@ -1,0 +1,19 @@
+{{! Extracted from playground.mustache; retained there for the combined demo. }}
+<div data-region="uisandbox-additionalcomments">
+{{#extracomment}}
+    <div class="mt-5 mb-5" data-region="uisandbox-extra-comment">
+        <h5 class="mb-3">{{title}}</h5>
+        <form>
+            <div class="mb-4">
+                <label for="{{id}}" class="form-label">{{label}}</label>
+                <textarea class="form-control" id="{{id}}" name="{{id}}"
+                          rows="{{rows}}" placeholder="{{placeholder}}"></textarea>
+                <div class="form-text">{{help}}</div>
+            </div>
+            <button type="button" class="btn btn-primary me-2">{{submitlabel}}</button>
+            <button type="reset" class="btn btn-secondary">{{clearlabel}}</button>
+        </form>
+    </div>
+{{/extracomment}}
+
+</div>

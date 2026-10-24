@@ -1,0 +1,351 @@
+<style>
+    .peer-assessment {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        color: #212529;
+        box-sizing: border-box;
+    }
+
+    .peer-assessment__heading {
+        margin-bottom: 0.75rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .peer-assessment__description {
+        margin-bottom: 2rem;
+        color: #495057;
+        line-height: 1.6;
+    }
+
+    .peer-assessment__instructions {
+        margin-bottom: 6rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .peer-assessment__track {
+        position: relative;
+        height: 8px;
+        margin: 0 12px 2rem;
+        border-radius: 5px;
+        background: #dee2e6;
+    }
+
+    .peer-assessment__node {
+        position: absolute;
+        top: 50%;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: 3px solid #2596be;
+        border-radius: 50%;
+        background: #fff;
+        transform: translate(-50%, -50%);
+        cursor: grab;
+        touch-action: none;
+    }
+
+    .peer-assessment__node:hover,
+    .peer-assessment__node:focus-visible {
+        background: #2596be;
+        box-shadow: 0 0 0 5px rgba(37, 150, 190, 0.18);
+        outline: none;
+        z-index: 5;
+    }
+
+    .peer-assessment__node:active {
+        cursor: grabbing;
+    }
+
+    .peer-assessment__node--fixed {
+        background: #2596be;
+        cursor: not-allowed;
+    }
+
+    .peer-assessment__node-label {
+        position: absolute;
+        bottom: calc(100% + 14px);
+        left: 50%;
+        min-width: 80px;
+        padding: 0.4rem;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        background: #fff;
+        color: #212529;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        white-space: nowrap;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .peer-assessment__node-label strong {
+        display: block;
+        color: #2596be;
+        font-size: 0.95rem;
+    }
+
+    .peer-assessment__node-tooltip {
+        display: none;
+        position: absolute;
+        bottom: calc(100% + 60px);
+        left: 50%;
+        padding: 0.45rem 0.7rem;
+        border-radius: 5px;
+        background: #212529;
+        color: #fff;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+    .peer-assessment__confirm {
+        padding: 0.65rem 1.5rem;
+        border: 1px solid #2596be;
+        border-radius: 6px;
+        background: #2596be;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .peer-assessment__confirm:hover {
+        background: #207fa1;
+        border-color: #207fa1;
+    }
+    .peer-assessment__node:hover .peer-assessment__node-tooltip,
+    .peer-assessment__node:focus-visible .peer-assessment__node-tooltip {
+        display: block;
+    }
+
+    .peer-assessment__endpoints {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+        color: #6c757d;
+        font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+        .peer-assessment {
+            padding: 1rem;
+        }
+
+        .peer-assessment__heading {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+
+<section class="peer-assessment">
+
+    <h2 class="peer-assessment__heading">
+        {{assessment_title}}
+    </h2>
+
+    <p class="peer-assessment__description">
+        {{assessment_description}}
+    </p>
+
+    <p class="peer-assessment__instructions">
+
+    </p>
+
+    <div
+            class="peer-assessment__track"
+            data-peer-slider-track
+            role="group"
+            aria-label="Peer percentage allocation">
+
+        {{#peers}}
+            <button
+                    type="button"
+                    class="peer-assessment__node"
+                    data-peer-slider-node
+                    data-peer-name="{{name}}"
+                    aria-label="{{name}} percentage allocation">
+
+                <span class="peer-assessment__node-label">
+                    <strong data-peer-percentage>0%</strong>
+                    <span>{{name}}</span>
+                </span>
+
+                <span class="peer-assessment__node-tooltip">
+                    {{name}}
+                </span>
+
+            </button>
+        {{/peers}}
+
+    </div>
+
+    <div class="peer-assessment__endpoints">
+        <span>0%</span>
+        <span>100%</span>
+    </div>
+    <div class="peer-assessment__actions">
+        <button
+                type="button"
+                class="peer-assessment__confirm">
+            Confirm
+        </button>
+    </div>
+
+</section>
+
+<script>
+    (function () {
+        "use strict";
+
+        function initialisePeerSliders() {
+            document.querySelectorAll("[data-peer-slider-track]").forEach(
+                    function (track) {
+                        if (track.dataset.initialised) {
+                            return;
+                        }
+
+                        track.dataset.initialised = "true";
+
+                        var nodes = Array.from(
+                                track.querySelectorAll("[data-peer-slider-node]")
+                        );
+
+                        var people = nodes.map(function (node) {
+                            return {
+                                node: node,
+                                name: node.dataset.peerName,
+                                label: node.querySelector("[data-peer-percentage]"),
+                                position: 0
+                            };
+                        });
+
+                        if (people.length === 0) {
+                            track.style.display = "none";
+                            return;
+                        }
+
+                        people.forEach(function (person, index) {
+                            person.position = people.length === 1
+                                    ? 0
+                                    : index / people.length * 100;
+                        });
+
+                        people[0].node.classList.add(
+                                "peer-assessment__node--fixed"
+                        );
+                        people[0].node.disabled = true;
+
+                        function updateSlider() {
+                            people.forEach(function (person, index) {
+                                var nextPosition = index < people.length - 1
+                                        ? people[index + 1].position
+                                        : 100;
+
+                                var percentage = Math.max(
+                                        0,
+                                        nextPosition - person.position
+                                );
+
+                                person.node.style.left = person.position + "%";
+                                person.label.textContent =
+                                        person.label.textContent = Math.round(percentage) + "%";
+                            });
+                        }
+
+                        var activeNode = null;
+                        var trackRect = null;
+
+                        people.forEach(function (person, index) {
+                            if (index === 0) {
+                                return;
+                            }
+
+                            var node = person.node;
+
+                            node.addEventListener("pointerdown", function (event) {
+                                activeNode = person;
+                                trackRect = track.getBoundingClientRect();
+
+                                node.setPointerCapture(event.pointerId);
+                                event.preventDefault();
+                            });
+
+                            node.addEventListener("pointermove", function (event) {
+                                if (activeNode !== person || !trackRect) {
+                                    return;
+                                }
+
+                                var currentIndex = people.indexOf(person);
+                                var position =
+                                        (event.clientX - trackRect.left) /
+                                        trackRect.width * 100;
+
+                                var minimum = people[currentIndex - 1].position;
+                                var maximum = currentIndex < people.length - 1
+                                        ? people[currentIndex + 1].position
+                                        : 100;
+
+                                person.position = Math.max(
+                                        minimum,
+                                        Math.min(maximum, position)
+                                );
+
+                                updateSlider();
+                            });
+
+                            function stopDragging() {
+                                activeNode = null;
+                                trackRect = null;
+                            }
+
+                            node.addEventListener("pointerup", stopDragging);
+                            node.addEventListener("pointercancel", stopDragging);
+
+                            node.addEventListener("keydown", function (event) {
+                                var currentIndex = people.indexOf(person);
+                                var minimum = people[currentIndex - 1].position;
+                                var maximum = currentIndex < people.length - 1
+                                        ? people[currentIndex + 1].position
+                                        : 100;
+
+                                if (event.key === "ArrowLeft") {
+                                    person.position = Math.max(
+                                            minimum,
+                                            person.position - 1
+                                    );
+                                } else if (event.key === "ArrowRight") {
+                                    person.position = Math.min(
+                                            maximum,
+                                            person.position + 1
+                                    );
+                                } else {
+                                    return;
+                                }
+
+                                event.preventDefault();
+                                updateSlider();
+                            });
+                        });
+
+                        updateSlider();
+                    }
+            );
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener(
+                    "DOMContentLoaded",
+                    initialisePeerSliders
+            );
+        } else {
+            initialisePeerSliders();
+        }
+    })();
+</script>

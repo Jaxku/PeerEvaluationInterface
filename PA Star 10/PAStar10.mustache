@@ -1,0 +1,200 @@
+
+<style>
+    .peer-assessment {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        color: #212529;
+    }
+
+    .peer-assessment__heading {
+        margin-bottom: 0.75rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .peer-assessment__description {
+        margin-bottom: 2rem;
+        color: #495057;
+        line-height: 1.6;
+    }
+
+    .peer-assessment__peer {
+        padding: 1.5rem 0;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .peer-assessment__peer-name {
+        margin-bottom: 1.25rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .peer-assessment__rating-list {
+        overflow-x: auto;
+        padding: 0.5rem 0 1rem;
+    }
+
+    .peer-assessment__ratings {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .peer-assessment__rating {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+        min-width: 0;
+    }
+
+    .peer-assessment__descriptor {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        min-height: 2.5rem;
+        font-size: 0.75rem;
+        line-height: 1.25;
+        color: #495057;
+        overflow-wrap: anywhere;
+    }
+
+    .peer-assessment__radio {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+    }
+
+    .peer-assessment__star {
+        display: inline-block;
+        color: #adb5bd;
+        font-size: 2rem;
+        line-height: 1.2;
+        cursor: pointer;
+    }
+
+    .peer-assessment__radio:checked + .peer-assessment__star {
+        color: #ffc107;
+    }
+
+    .peer-assessment__radio:focus-visible + .peer-assessment__star {
+        outline: 2px solid #0f6cbf;
+        outline-offset: 3px;
+        border-radius: 3px;
+    }
+
+    .peer-assessment__value {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .peer-assessment__actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .peer-assessment__confirm {
+        padding: 0.65rem 1.5rem;
+        border: 1px solid #0f6cbf;
+        border-radius: 6px;
+        background: #0f6cbf;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    @media (max-width: 800px) {
+        .peer-assessment__ratings {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 600px) {
+        .peer-assessment {
+            padding: 1rem;
+        }
+
+        .peer-assessment__heading {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+
+<section class="peer-assessment">
+
+    <h2 class="peer-assessment__heading">
+        {{assessment_title}}
+    </h2>
+
+    <p class="peer-assessment__description">
+        {{assessment_description}}
+    </p>
+
+    {{#peers}}
+        <div class="peer-assessment__peer">
+
+            <h3 class="peer-assessment__peer-name">
+                {{name}}
+            </h3>
+
+            <div class="peer-assessment__rating-list">
+                <div
+                        class="peer-assessment__ratings"
+                        role="group"
+                        aria-label="Rate {{name}}">
+
+                    {{#ratings}}
+                        <div class="peer-assessment__rating">
+
+                            <span class="peer-assessment__descriptor">
+                                {{descriptor}}
+                            </span>
+
+                            <input
+                                    class="peer-assessment__radio"
+                                    type="radio"
+                                    name="peer_rating_{{name}}"
+                                    id="peer-rating-{{name}}-{{value}}"
+                                    value="{{value}}"
+                                    aria-label="{{value}} out of 7: {{descriptor}}">
+
+                            <label
+                                    class="peer-assessment__star"
+                                    for="peer-rating-{{name}}-{{value}}"
+                                    title="{{value}} out of 7">
+                                &#9733;
+                            </label>
+
+                            <span class="peer-assessment__value">
+                                {{value}}
+                            </span>
+
+                        </div>
+                    {{/ratings}}
+
+                </div>
+            </div>
+
+        </div>
+    {{/peers}}
+
+    <div class="peer-assessment__actions">
+        <button
+                type="button"
+                class="peer-assessment__confirm">
+            Confirm
+        </button>
+    </div>
+
+</section>

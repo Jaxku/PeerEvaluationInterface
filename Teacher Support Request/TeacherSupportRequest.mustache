@@ -1,0 +1,107 @@
+{{! Extracted from playground.mustache; retained there for the combined demo. }}
+<div data-region="uisandbox-teachersupportrequest">
+{{#helprequest}}
+    <div class="card mt-5 mb-5" data-region="uisandbox-help-request">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-life-ring me-2" aria-hidden="true"></i>{{title}}
+            </h5>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-4">{{intro}}</p>
+
+            <form>
+                {{! Which group member is this about? }}
+                <div class="mb-5">
+                    <label for="{{memberid}}" class="form-label fw-bold">
+                        <i class="fa-solid fa-user-group me-2" aria-hidden="true"></i>{{memberlabel}}
+                    </label>
+                    <select class="form-select" id="{{memberid}}" name="{{memberid}}">
+                        <option value="" selected disabled>{{memberplaceholder}}</option>
+                        {{#memberoptions}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/memberoptions}}
+                    </select>
+                </div>
+
+                {{! Severity: colour and icon show how serious each level is. }}
+                <fieldset class="mb-5">
+                    <legend class="fs-6 fw-bold mb-1">{{severitylabel}}</legend>
+                    <p class="form-text mt-0 mb-3">{{severityhelp}}</p>
+                    {{#severities}}
+                        <label for="{{id}}" class="alert alert-{{type}} {{extraclass}} d-flex align-items-center gap-3 mb-3 w-100" style="cursor: pointer;">
+                            <input type="radio" class="form-check-input fs-5 m-0 flex-shrink-0"
+                                   name="{{severityname}}" id="{{id}}" value="{{value}}">
+                            <i class="fa-solid {{icon}} fs-4" aria-hidden="true"></i>
+                            <span>
+                                <strong class="d-block">{{label}}</strong>
+                                {{description}}
+                            </span>
+                        </label>
+                    {{/severities}}
+                </fieldset>
+
+                {{! Details of the concern. }}
+                <div class="mb-5">
+                    <label for="{{detailsid}}" class="form-label fw-bold">
+                        <i class="fa-solid fa-comment-dots me-2" aria-hidden="true"></i>{{detailslabel}}
+                    </label>
+                    <textarea class="form-control" id="{{detailsid}}" name="{{detailsid}}"
+                              rows="{{detailsrows}}" placeholder="{{detailsplaceholder}}"></textarea>
+                </div>
+
+                {{! Meeting request. }}
+                {{#meeting}}
+                <div class="mb-5">
+                    <h6 class="fw-bold mb-1">
+                        <i class="fa-solid fa-calendar-check me-2" aria-hidden="true"></i>{{title}}
+                    </h6>
+                    <p class="form-text mt-0 mb-3">{{help}}</p>
+
+                    <div class="mb-4">
+                        <label for="{{teacherid}}" class="form-label">{{teacherlabel}}</label>
+                        <select class="form-select" id="{{teacherid}}" name="{{teacherid}}">
+                            <option value="" selected>{{teacherplaceholder}}</option>
+                            {{#teachers}}
+                                <option value="{{value}}">{{label}}</option>
+                            {{/teachers}}
+                        </select>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label for="{{dateid}}" class="form-label">{{datelabel}}</label>
+                            <input type="date" class="form-control" id="{{dateid}}" name="{{dateid}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{timeid}}" class="form-label">{{timelabel}}</label>
+                            <select class="form-select" id="{{timeid}}" name="{{timeid}}">
+                                <option value="" selected>{{timeplaceholder}}</option>
+                                {{#times}}
+                                    <option value="{{value}}">{{label}}</option>
+                                {{/times}}
+                            </select>
+                        </div>
+                    </div>
+
+                    <fieldset>
+                        <legend class="form-label fs-6 mb-2">{{formatlabel}}</legend>
+                        {{#formats}}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio"
+                                       name="{{formatname}}" id="{{id}}" value="{{value}}">
+                                <label class="form-check-label" for="{{id}}">{{label}}</label>
+                            </div>
+                        {{/formats}}
+                    </fieldset>
+                </div>
+                {{/meeting}}
+
+                <button type="button" class="btn btn-primary me-2">{{submitlabel}}</button>
+                <button type="reset" class="btn btn-secondary">{{clearlabel}}</button>
+            </form>
+        </div>
+    </div>
+{{/helprequest}}
+
+</div>

@@ -1,0 +1,15 @@
+{{! Extracted from playground.mustache; retained there for the combined demo. }}
+<div data-region="uisandbox-notices">
+{{#messages}}
+    <div class="alert alert-{{type}} d-flex align-items-center gap-3 mb-4" role="alert">
+        {{#icon}}
+            <i class="fa-solid {{icon}} fs-4 mt-1" aria-hidden="true"></i>
+        {{/icon}}
+        <div>
+            <strong class="d-block">{{title}}</strong>
+            {{{text}}}
+        </div>
+    </div>
+{{/messages}}
+
+</div>

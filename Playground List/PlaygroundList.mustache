@@ -1,0 +1,14 @@
+{{! Extracted from playground.mustache; retained there for the combined demo. }}
+<div data-region="uisandbox-playground">
+<h5 class="mt-5 mb-3">{{heading}}</h5>
+
+    <ul class="list-group">
+        {{#items}}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{label}}
+                <button type="button" class="btn btn-sm btn-outline-primary"
+                        data-action="uisandbox-hello" data-label="{{label}}">Click me</button>
+            </li>
+        {{/items}}
+    </ul>
+</div>
